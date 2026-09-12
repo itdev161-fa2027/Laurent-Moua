@@ -6,6 +6,7 @@
     "express-validator": "^7.3.2",
     "mongoose": "^9.10.0"
   },
+  "type": "module",
   "devDependencies": {
     "concurrently": "^10.0.5",
     "nodemon": "^3.1.14"
