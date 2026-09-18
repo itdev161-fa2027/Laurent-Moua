@@ -20,7 +20,7 @@ app.get('/', (req, res) =>
  * @desc Register user
  */
 
-app.post('/api/data', (req, res) => {
+app.post('/api/users', (req, res) => {
     console.log(req.body);
     res.send(req.body);
 });
