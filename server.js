@@ -1,5 +1,6 @@
 import express from 'express';
 import connectDatabase from './config/db.js';
+import { check, validationResult } from 'express-validator';
 
 // Initialize express app
 const app = express();
@@ -20,9 +21,17 @@ app.get('/', (req, res) =>
  * @desc Register user
  */
 
-app.post('/api/users', (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
+app.post('/api/users', [
+    check('name', 'Name is required').not().isEmpty(),
+    check('email', 'Valid email is required').isEmail(),
+    check('password', 'Password must be at least 6 characters').isLength({ min: 6 })
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }else {
+        return res.send(req.body);
+    }
 });
 
 // Start the server and listen on port 3000
