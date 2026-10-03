@@ -11,6 +11,10 @@ import Post from './models/Post.js';
 // Load environment variables
 dotenv.config();
 
+import dns from "node:dns/promises";
+
+dns.setServers(["1.1.1.1", "1.0.0.1"]);
+
 // Initialize express application
 const app = express();
 
