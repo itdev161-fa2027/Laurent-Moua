@@ -28,129 +28,65 @@ app.get('/', (req, res) =>
  * @desc    Register user
  */
 app.post('/api/users', [
-
   check('name', 'Name is required').not().isEmpty(),
   check('email', 'Please include a valid email').isEmail(),
   check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
-  ], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { name, email, password } = req.body;
-
-    try {
-      // Check if user already exists
-      let user = await User.findOne({ email: email.toLowerCase() });
-      if (user) {
-        return res.status(400).json({
-          errors: [{ msg: 'User with this email already exists' }]
-        });
-      }
-
-      // Create new user instance
-      user = new User({
-        name,
-        email: email.toLowerCase(),
-        password
-      });
-
-      // Hash the password
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-
-      // Save user to database
-      await user.save();
-
-      // Create JWT payload
-      const payload = {
-        user: {
-          id: user.id
-        }
-      };
-
-      // Generate JWT token
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' },
-        (err, token) => {
-          if (err) throw err;
-          res.json({
-            msg: 'User registered successfully',
-            token
-          });
-        }
-      );
-
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server error');
-    }
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
 
-    check('name', 'Name is required').not().isEmpty(),
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
-    ], async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+  const { name, email, password } = req.body;
 
-        const { name, email, password } = req.body;
-
-        try {
-            // Check if user already exists
-            let user = await User.findOne({ email: email.toLowerCase() });
-            if (user) {
-                return res.status(400).json({
-                    errors: [{ msg: 'User with this email already exists' }]
-                });
-            }
-
-            // Create new user instance
-            user = new User({
-                name,
-                email: email.toLowerCase(),
-                password
-            });
-
-            // Hash the password
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(password, salt);
-
-            // Save user to database
-            await user.save();
-
-            // Create JWT payload
-            const payload = {
-                user: {
-                    id: user.id
-                }
-            };
-
-            // Generate JWT token
-            jwt.sign(
-                payload,
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' },
-                (err, token) => {
-                    if (err) throw err;
-                    res.json({
-                        msg: 'User registered successfully',
-                        token
-                    });
-                }
-            );
-
-        } catch (error) {
-            console.error(error.message);
-            res.status(500).send('Server error');
-        }
+  try {
+    // Check if user already exists
+    let user = await User.findOne({ email: email.toLowerCase() });
+    if (user) {
+      return res.status(400).json({
+        errors: [{ msg: 'User with this email already exists' }]
+      });
     }
-);
+
+    // Create new user instance
+    user = new User({
+      name,
+      email: email.toLowerCase(),
+      password
+    });
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    // Save user to database
+    await user.save();
+
+    // Create JWT payload
+    const payload = {
+      user: {
+        id: user.id
+      }
+    };
+
+    // Generate JWT token
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' },
+      (err, token) => {
+        if (err) throw err;
+        res.json({
+          msg: 'User registered successfully',
+          token
+        });
+      }
+    );
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+});
 
 /**
  * @route   POST api/auth
@@ -215,10 +151,9 @@ app.post('/api/auth', [
 
 // Connection listener
 app.listen(3000, () => console.log(`Express server running on port 3000`));
-=======
     check('email', 'Please include a valid email').isEmail(),
     check('password', 'Password is required').exists()
-    ], async (req, res) => {
+    , async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -268,9 +203,7 @@ app.listen(3000, () => console.log(`Express server running on port 3000`));
             console.error(error.message);
             res.status(500).send('Server error');
         }
-    }
-);
+    };
 
 // Connection listener
 app.listen(3000, () => console.log(`Express server running on port 3000`));
->>>>>>> e6211bac72ab15ae4d560cc65711a58a9fd75009
