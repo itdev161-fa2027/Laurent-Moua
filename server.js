@@ -1,12 +1,13 @@
-import express from 'express';
-import connectDatabase from './config/db.js';
-import { check, validationResult } from 'express-validator';
-import User from './models/User.js';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import auth from './middleware/auth.js';
-import Post from './models/Post.js';
+  import express from 'express';
+  import connectDatabase from './config/db.js';
+  import { check, validationResult } from 'express-validator';
+  import User from './models/User.js';
+  import Post from './models/Post.js';
+  import bcrypt from 'bcryptjs';
+  import jwt from 'jsonwebtoken';
+  import dotenv from 'dotenv';
+  import auth from './middleware/auth.js';
+  import cors from 'cors';
 
 // Load environment variables
 dotenv.config();
@@ -20,6 +21,10 @@ const app = express();
 
 // Connect to the database
 connectDatabase();
+
+// Enable CORS
+app.use(cors());
+
 
 // Configure Middleware
 app.use(express.json());
